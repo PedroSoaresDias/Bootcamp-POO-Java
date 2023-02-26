@@ -101,6 +101,4 @@ public class Bootcamp {
             return false;
         return true;
     }
-
-    
 }
