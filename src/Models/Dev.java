@@ -1,6 +1,7 @@
 package Models;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class Dev {
@@ -9,12 +10,23 @@ public class Dev {
     private Set<Conteudo> conteudoConcluido = new LinkedHashSet<>();
 
     public void IncreverBootcamp(Bootcamp bootcamp) {
+        this.conteudosInscritos.addAll(bootcamp.getConteudos());
+        bootcamp.getDevsInscritos().add(this);
     }
     
     public void Progredir() {
+        Optional<Conteudo> conteudo = this.conteudosInscritos.stream().findFirst();
+        if (conteudo.isPresent()) {
+            this.conteudoConcluido.add(conteudo.get());
+            this.conteudosInscritos.remove(conteudo.get());
+        }
+        else {
+            System.err.println("Você não está matriculado em nenhum conteúdo!");
+        }
     }
     
-    public void CalcularTotalXp() {
+    public double CalcularTotalXp() {
+        return this.conteudoConcluido.stream().mapToDouble(Conteudo::CalcularXp).sum();
     }
 
     public String getNome() {
@@ -77,6 +89,4 @@ public class Dev {
             return false;
         return true;
     }
-    
-    
 }
